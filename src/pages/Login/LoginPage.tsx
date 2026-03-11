@@ -1,7 +1,13 @@
 
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+// Dummy credentials for demo
+const DUMMY_EMAIL = 'admin@medicare.com'
+const DUMMY_PASSWORD = 'admin123'
 
 const LoginPage = () => {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -10,11 +16,20 @@ const LoginPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate login
+    // Simulate login with dummy credentials
     setTimeout(() => {
-      console.log('Login attempt:', { email, password })
-      setIsLoading(false)
-    }, 1500)
+      if (email === DUMMY_EMAIL && password === DUMMY_PASSWORD) {
+        navigate('/dashboard')
+      } else {
+        alert('Invalid credentials! Use:\nEmail: admin@medicare.com\nPassword: admin123')
+        setIsLoading(false)
+      }
+    }, 1000)
+  }
+
+  const fillDummyCredentials = () => {
+    setEmail(DUMMY_EMAIL)
+    setPassword(DUMMY_PASSWORD)
   }
 
   return (
@@ -101,6 +116,31 @@ const LoginPage = () => {
           <div className="mb-10">
             <h2 className="text-3xl font-bold text-slate-800 mb-2">Sign in</h2>
             <p className="text-slate-500">Enter your credentials to access your dashboard</p>
+          </div>
+
+          {/* Demo Credentials Hint */}
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+            <div className="flex items-start gap-3">
+              <div className="p-1.5 bg-blue-100 rounded-lg">
+                <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-blue-800">Demo Credentials</p>
+                <p className="text-xs text-blue-600 mt-1">
+                  Email: <span className="font-mono">admin@medicare.com</span>
+                  <br />Password: <span className="font-mono">admin123</span>
+                </p>
+                <button
+                  type="button"
+                  onClick={fillDummyCredentials}
+                  className="mt-2 text-xs font-semibold text-blue-700 hover:text-blue-800 underline"
+                >
+                  Auto-fill credentials
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Login Form */}

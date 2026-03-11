@@ -13,6 +13,16 @@ const OPDPatientList = lazy(() => import('../pages/OPD/OPDPatientList'))
 const OPDRegistration = lazy(() => import('../pages/OPD/OPDRegistration'))
 const OPDSlip = lazy(() => import('../pages/OPD/OPDSlip'))
 
+// IPD Pages
+const IPDPatientList = lazy(() => import('../pages/IPD/IPDPatientList'))
+const IPDAdmitPatient = lazy(() => import('../pages/IPD/IPDAdmitPatient'))
+
+// Room Management
+const RoomManagement = lazy(() => import('../pages/Rooms/RoomManagement'))
+
+// Doctor Management
+const DoctorManagement = lazy(() => import('../pages/Doctors/DoctorManagement'))
+
 // Route configuration
 const routes = [
   // Public Routes
@@ -40,7 +50,8 @@ const routes = [
     path: '/ipd',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">IPD Module - Coming Soon</div> },
+      { index: true, element: <IPDPatientList /> },
+      { path: 'admit', element: <IPDAdmitPatient /> },
     ],
   },
   {
@@ -54,14 +65,14 @@ const routes = [
     path: '/rooms',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Rooms Module - Coming Soon</div> },
+      { index: true, element: <RoomManagement /> },
     ],
   },
   {
     path: '/doctors',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Doctors Module - Coming Soon</div> },
+      { index: true, element: <DoctorManagement /> },
     ],
   },
   {
