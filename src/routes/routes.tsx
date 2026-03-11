@@ -23,6 +23,31 @@ const RoomManagement = lazy(() => import('../pages/Rooms/RoomManagement'))
 // Doctor Management
 const DoctorManagement = lazy(() => import('../pages/Doctors/DoctorManagement'))
 
+// Services
+const ServiceList = lazy(() => import('../pages/Services/ServiceList'))
+const AssignService = lazy(() => import('../pages/Services/AssignService'))
+
+// Patient Management
+const PatientList = lazy(() => import('../pages/Patients/PatientList'))
+const PatientDetail = lazy(() => import('../pages/Patients/PatientDetail'))
+
+// Pharmacy
+const PharmacyDashboard = lazy(() => import('../pages/Pharmacy/PharmacyDashboard'))
+const AddPrescription = lazy(() => import('../pages/Pharmacy/AddPrescription'))
+
+// Billing
+const BillingDashboard = lazy(() => import('../pages/Billing/BillingDashboard'))
+const GenerateBill = lazy(() => import('../pages/Billing/GenerateBill'))
+
+// Settings
+const SettingsDashboard = lazy(() => import('../pages/Settings/SettingsDashboard'))
+
+// Expenses
+const ExpenseDashboard = lazy(() => import('../pages/Expenses/ExpenseDashboard'))
+
+// Reports
+const ReportsDashboard = lazy(() => import('../pages/Reports/ReportsDashboard'))
+
 // Route configuration
 const routes = [
   // Public Routes
@@ -58,7 +83,8 @@ const routes = [
     path: '/patients',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Patients Module - Coming Soon</div> },
+      { index: true, element: <PatientList /> },
+      { path: ':id', element: <PatientDetail /> },
     ],
   },
   {
@@ -79,42 +105,45 @@ const routes = [
     path: '/services',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Services Module - Coming Soon</div> },
+      { index: true, element: <ServiceList /> },
+      { path: 'assign', element: <AssignService /> },
     ],
   },
   {
     path: '/pharmacy',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Pharmacy Module - Coming Soon</div> },
+      { index: true, element: <PharmacyDashboard /> },
+      { path: 'add-prescription', element: <AddPrescription /> },
     ],
   },
   {
     path: '/billing',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Billing Module - Coming Soon</div> },
+      { index: true, element: <BillingDashboard /> },
+      { path: 'generate', element: <GenerateBill /> },
     ],
   },
   {
     path: '/expenses',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Expenses Module - Coming Soon</div> },
+      { index: true, element: <ExpenseDashboard /> },
     ],
   },
   {
     path: '/reports',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Reports Module - Coming Soon</div> },
+      { index: true, element: <ReportsDashboard /> },
     ],
   },
   {
     path: '/settings',
     element: <DashboardLayout />,
     children: [
-      { index: true, element: <div className="p-6 text-slate-600">Settings Module - Coming Soon</div> },
+      { index: true, element: <SettingsDashboard /> },
     ],
   },
   {
