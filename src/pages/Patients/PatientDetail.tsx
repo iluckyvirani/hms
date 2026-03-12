@@ -63,6 +63,31 @@ const mockPayments = [
   { id: 4, date: '2025-08-15', type: 'Deposit', amount: 10000, mode: 'Cash', receipt: 'RCP-2025-1480', reference: 'IPD20250815002' },
 ]
 
+// Mock discharge cards
+const mockDischargeCards = [
+  {
+    id: 1,
+    admitId: 'IPD20250815002',
+    dischargeDate: '2025-08-20',
+    patientName: 'Rahul Sharma',
+    diagnosis: 'Acute Gastroenteritis with mild dehydration',
+    doctor: 'Dr. Rajesh Patel',
+    specialization: 'Gastroenterology',
+    createdBy: 'Dr. Rajesh Patel',
+    createdAt: '2025-08-20T10:30:00',
+    followUpDate: '2025-08-27',
+    conditionAtDischarge: 'Stable',
+    investigations: ['Complete Blood Count (CBC)', 'Stool Routine & Culture', 'Serum Electrolytes'],
+    treatmentGiven: 'IV Fluids, Antibiotics, Antiemetics, ORS therapy',
+    medicinesOnDischarge: [
+      { name: 'Norfloxacin 400mg', dosage: '1 tablet twice daily', duration: '5 days', instructions: 'After meals' },
+      { name: 'ORS Powder', dosage: '1 sachet in 1L water', duration: '3 days', instructions: 'Sip frequently' },
+      { name: 'Probiotics', dosage: '1 capsule daily', duration: '7 days', instructions: 'After breakfast' },
+    ],
+    advice: 'Bland diet for 1 week. Avoid spicy and oily food. Stay hydrated. Rest well.',
+  },
+]
+
 // Mock final bills (FnF)
 const mockFinalBills = [
   {
@@ -133,7 +158,7 @@ const currentAdmissionBillData = {
   totalDeposits: 15000,
 }
 
-type TabType = 'profile' | 'admits' | 'reports' | 'medicines' | 'services' | 'payments' | 'bills'
+type TabType = 'profile' | 'admits' | 'reports' | 'medicines' | 'services' | 'payments' | 'bills' | 'discharge-cards'
 
 const PatientDetail = () => {
   const navigate = useNavigate()
@@ -155,6 +180,7 @@ const PatientDetail = () => {
     { id: 'services', label: 'Services', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg> },
     { id: 'payments', label: 'Payments', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg> },
     { id: 'bills', label: 'Final Bills', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" /></svg> },
+    { id: 'discharge-cards', label: 'Discharge Cards', icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg> },
   ]
 
   const formatDate = (dateStr: string) => {
@@ -669,6 +695,100 @@ const PatientDetail = () => {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Discharge Cards Tab */}
+          {activeTab === 'discharge-cards' && (
+            <div className="bg-white rounded-xl border border-slate-100 overflow-hidden">
+              <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                <h3 className="font-semibold text-slate-800">Discharge Summaries</h3>
+                {mockAdmitHistory.filter(a => a.status === 'admitted').length > 0 && (
+                  <Button 
+                    size="sm" 
+                    onClick={() => navigate(`/ipd/discharge-card?admitId=${mockAdmitHistory.find(a => a.status === 'admitted')?.admitId}&patientId=${patient.patientId}`)}
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Create Discharge Card
+                  </Button>
+                )}
+              </div>
+              
+              {mockDischargeCards.length === 0 ? (
+                <div className="text-center py-8">
+                  <svg className="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                  <p className="text-slate-500">No discharge cards created yet</p>
+                </div>
+              ) : (
+                <div className="divide-y divide-slate-100">
+                  {mockDischargeCards.map(card => (
+                    <div key={card.id} className="p-4 hover:bg-slate-50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-mono text-sm font-semibold text-blue-600">{card.admitId}</span>
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
+                              card.conditionAtDischarge === 'Stable' ? 'bg-emerald-100 text-emerald-700' :
+                              card.conditionAtDischarge === 'Improved' ? 'bg-blue-100 text-blue-700' :
+                              'bg-amber-100 text-amber-700'
+                            }`}>
+                              {card.conditionAtDischarge}
+                            </span>
+                          </div>
+                          <p className="text-sm text-slate-600">Discharged on {formatDate(card.dischargeDate)}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button 
+                            onClick={() => navigate(`/ipd/discharge-card?admitId=${card.admitId}&view=true`)}
+                            className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            View
+                          </button>
+                          <button className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                            </svg>
+                            Print
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-slate-50 rounded-lg p-3 space-y-2">
+                        <div className="flex items-center gap-4 text-sm">
+                          <div>
+                            <span className="text-slate-500">Doctor:</span>
+                            <span className="ml-1 font-medium text-slate-700">{card.doctor}</span>
+                          </div>
+                          <span className="text-slate-300">|</span>
+                          <div>
+                            <span className="text-slate-500">{card.specialization}</span>
+                          </div>
+                        </div>
+                        <div className="text-sm">
+                          <span className="text-slate-500">Diagnosis:</span>
+                          <span className="ml-1 text-slate-700">{card.diagnosis}</span>
+                        </div>
+                        <div className="text-sm">
+                          <span className="text-slate-500">Medicines on Discharge:</span>
+                          <span className="ml-1 text-slate-700">{card.medicinesOnDischarge.length} medications</span>
+                        </div>
+                        <div className="text-sm">
+                          <span className="text-slate-500">Follow-up:</span>
+                          <span className="ml-1 text-blue-600 font-medium">{formatDate(card.followUpDate)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
